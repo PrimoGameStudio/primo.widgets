@@ -1,0 +1,76 @@
+{
+  "namespace": "primo.widgets",
+  "outputs": [
+    "DP-2"
+  ],
+  "widgets": {
+    "clock": {
+      "enabled": true,
+      "format": "h:mm AP",
+      "showSeconds": false,
+      "workspace": "all",
+      "fontFamily": "OpenDyslexicMono",
+      "fontWeight": 800,
+      "fontScale": 0.03,
+      "letterSpacing": -3,
+      "color": "",
+      "opacity": 0.5,
+      "position": "bottom",
+      "xRatio": 0.945,
+      "yRatio": 0.975
+    },
+    "date": {
+      "enabled": true,
+      "format": "dddd, MMMM d",
+      "workspace": "all",
+      "fontFamily": "OpenDyslexicMono",
+      "fontWeight": 900,
+      "fontScale": 0.015,
+      "letterSpacing": -3,
+      "color": "",
+      "opacity": 0.92,
+      "position": "bottom",
+      "xRatio": 0.945,
+      "yRatio": 0.94
+    },
+    "cava": {
+      "enabled": false,
+      "workspace": "all",
+      "position": "bottom",
+      "xRatio": 0.5,
+      "yRatio": 0.5,
+      "size": 3072,
+      "bars": 256,
+      "framerate": 165,
+      "innerRadiusRatio": 0.5,
+      "barSpacing": 2,
+      "barThickness": 22,
+      "color": "system",
+      "opacity": 0.5,
+      "hideWhenIdle": true,
+      "idleTimeout": 3,
+      "sensitivity": 75,
+      "ringPulse": 0.25
+    },
+    "steam": {
+      "enabled": true,
+      "workspace": "8",
+      "count": 6,
+      "color": "",
+      "tileWidth": 208,
+      "tileHeight": 120,
+      "spacing": 16,
+      "cornerRadius": 10,
+      "showName": true,
+      "showMeta": true,
+      "opacity": 0.95,
+      "interactive": true,
+      "xRatio": 0.5,
+      "yRatio": 0.895,
+      "refreshInterval": 60,
+      "requireArt": true,
+      "hideIds": ["480"],
+      "names": {}
+    }
+  }
+}
