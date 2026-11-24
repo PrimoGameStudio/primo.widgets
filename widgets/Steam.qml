@@ -135,20 +135,11 @@ Item {
   function launch(game) {
     if (game && typeof game === "object" && game.source === "battlenet" && game.launchCode) {
       root.launchBattlenet(game)
-    } else if (game && typeof game === "object" && game.source === "shortcut" && game.exe) {
-      var exe = String(game.exe)
-      var dir = String(game.startDir || "")
-      var opts = String(game.launchOptions || "")
-      if (exe.startsWith('"') && exe.endsWith('"')) exe = exe.slice(1, -1)
-      if (dir.startsWith('"') && dir.endsWith('"')) dir = dir.slice(1, -1)
-      var cmd = ""
-      if (dir) cmd += "cd " + JSON.stringify(dir) + " && "
-      cmd += JSON.stringify(exe)
-      if (opts) cmd += " " + opts
-      cmd += " &"
-      console.log("primo.widgets shortcut launch: " + cmd)
-      Quickshell.execDetached(["bash", "-c", cmd])
     } else {
+      // Steam games and non-Steam shortcuts both launch through Steam:
+      // shortcuts are registered there too, with a 64-bit rungameid derived
+      // from shortcuts.vdf. Letting Steam do the launch also applies the
+      // shortcut's own launch options instead of exec'ing the target directly.
       var id = String((game && typeof game === "object") ? (game.rungameid || game.appid) : game)
       console.log("primo.widgets Steam launch " + id)
       Quickshell.execDetached(["bash", "-c",

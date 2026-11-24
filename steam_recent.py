@@ -14,7 +14,10 @@ Non-Steam shortcuts (userdata/*/config/shortcuts.vdf) are merged into the
 same recency-sorted list with source "shortcut": names and LastPlayTime come
 from shortcuts.vdf itself, playtime merges from localconfig.vdf (tracked
 under the signed shortcut id), art comes from the local config/grid custom
-artwork (hero first, monogram fallback when unset).
+artwork (hero first, monogram fallback when unset). They launch through
+Steam via steam://rungameid/<64-bit shortcut id>, where the id is
+(unsigned 32-bit shortcuts.vdf appid << 32) | 0x02000000; it is emitted as
+a JSON string because 64-bit ids exceed JavaScript's safe integer range.
 
 Battle.net games (umu-launcher prefix, e.g. ~/Games/battlenet) merge in with
 source "battlenet": recency comes from the client's Battle.net.config
@@ -179,20 +182,24 @@ def parse_shortcuts(shortcut_paths):
                 continue
             if not signed:
                 continue
-            unsigned = str(signed % 2**32)
+            unsigned_int = signed % 2**32
+            unsigned = str(unsigned_int)
             name = get_str(b"AppName").strip()
             if not name:
                 continue
             last = get_i32(b"LastPlayTime")
             cur = merged.get(unsigned)
             if cur is None or last > cur["lastPlayed"]:
+                # Steam's URI for a non-Steam shortcut uses a 64-bit id:
+                # (unsigned 32-bit shortcuts.vdf appid << 32) | 0x02000000.
+                # Keep it as a string: 64-bit ids are beyond JavaScript's
+                # safe integer range, so QML's JSON.parse would round it.
+                long_id = (unsigned_int << 32) | 0x02000000
                 merged[unsigned] = {
                     "name": name,
                     "lastPlayed": last,
-                    "signed": str(signed),
-                    "exe": get_str(b"Exe").strip(),
-                    "startDir": get_str(b"StartDir").strip(),
-                    "launchOptions": get_str(b"LaunchOptions").strip(),
+                    "signed": str(signed),  # localconfig.vdf playtime key
+                    "rungameid": str(long_id),
                 }
     return merged
 
@@ -437,10 +444,7 @@ def main():
                 "playtime2wksMin": pt.get("playtime2wksMin", 0),
                 "art": art,
                 "source": "shortcut",
-                "rungameid": int(sc["signed"]),
-                "exe": sc.get("exe", ""),
-                "startDir": sc.get("startDir", ""),
-                "launchOptions": sc.get("launchOptions", ""),
+                "rungameid": sc["rungameid"],
             })
 
     if args.include_battlenet:

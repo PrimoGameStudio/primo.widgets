@@ -134,7 +134,10 @@ Non-Steam shortcuts merge into the same recency-sorted grid from
 `config/grid` custom artwork (`_hero.jpg` first). Shortcut tiles carry a
 small `non-Steam` badge and fall back to a letter tile when no custom art is
 set — set artwork in the Steam client (Manage → Set custom artwork) to
-promote one to a full capsule on the next poll.
+promote one to a full capsule on the next poll. Like Steam games, shortcuts
+launch via `steam://rungameid` using the 64-bit shortcut id
+(`(unsigned 32-bit appid << 32) | 0x02000000`), so Steam applies the
+shortcut's own launch options.
 
 Battle.net games (umu-launcher prefix, e.g. `~/Games/battlenet`) merge into
 the same grid from the local `Battle.net.config` (`Games.<uid>.LastPlayed`,
